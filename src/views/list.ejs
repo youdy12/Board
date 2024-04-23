@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+    * {
+      font-family: "Gowun Batang", serif;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6; /* 행간 설정 */
+      letter-spacing: 0.05em; /* 자간 설정 */
+      text-align: justify;
+    }
+    body{
+      position: relative;
+      width: 700px;
+      margin: 0 auto;
+    }
+    li {
+      list-style: none;
+      display: inline;
+    }
+    thead{
+      background: #8285b7;
+      color: white !important;
+      font-weight: 500;
+      border-bottom: 1px solid #767676;
+      width:100%;
+      margin:0 auto;
+      position:relative;
+      font-size: 15px;
+    }
+    table {
+      border-spacing: 1; 
+      border-collapse: collapse; 
+      border-radius:6px;
+      overflow:hidden;
+      width: 700px;
+      border: none;
+      margin-top: 5px;
+    }
+    tbody {
+      background-color: #fcfcfb;
+    }
+
+    tbody tr:hover {
+      background-color: #d3d3d3;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+    td{
+      padding: 0 5px 0 5px;
+      text-align:center;
+      font-size: 12px;
+    }
+
+
+    .title {
+      text-align: left;
+      padding: 8px 7px 8px 20px;
+      min-width: 320px;
+      font-weight: bold;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .pagination a {
+        color: black;
+        float: center;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+    
+    strong {
+        color: black;
+        float: center;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+
+    .pagination a:hover:not(.active) {
+      background-color: rgb(182, 182, 182);
+      border-radius: 50%;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    h1 a {
+      color: #d95542;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    h2 {
+      margin: 10px 0 10px 0;
+    }
+    h2 a{
+      margin: 10px 0 10px 0;
+      color: #8285b7;
+      text-decoration: none;
+    }
+
+    .findButton {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    background-color:  #8285b785;
+    color: white !important;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    width: auto;
+    font-size: 11px;
+    }
+
+    .WriteButton {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      border-radius: 4px;
+      background-color: #8285b7; 
+      float: right; 
+      margin-left: 20px;
+      color: white !important;
+      cursor: pointer;
+      padding: 5px 10px 5px 10px;
+      width: auto;
+      font-size: 11px;
+    }
+
+
+
+    .sort-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    background-color:  #8285b785;
+    color: white !important;
+    cursor: pointer;
+    padding: 5px 10px 5px 10px;
+    width: auto;
+    font-size: 11px;
+    }
+
+    button:hover {
+      background-color: #d3d3d3;
+    }
+    .sort-button:hover {
+      background-color: #d3d3d3;
+    }
+    .find {
+      margin: 20px;
+      text-align: center;
+    }
+    .board_views {
+      padding: 8px 0px 8px 0;
+      color: #4a4a4a;
+      font-size: 10px;
+    }
+    .board_user {
+      padding: 8px 0 8px 0;
+      color: #4a4a4a;
+      min-width: 20px; 
+      font-size: 10px;
+    }
+    .board_delete {
+      padding: 8px 6px 8px 6px;
+      font-size: 10px;
+    }
+
+    
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="http://localhost:3000/">BOARD</a>
+    <hr style="margin: 5px 0 5px 0;">
+  </h1>
+
+  <div style="display: flex; align-items: center;">
+    <h2><a href="http://localhost:3000/list?page=1">Board List</a></h2>
+  </div>
+  
+  <!-- 글쓰기 버튼 -->
+  <div>
+    <button class="WriteButton" type="button" onclick="location.href='/write'">글쓰기</button>
+  </div>
+
+
+  <!-- 정렬 옵션을 선택할 폼 -->
+  <div>  
+    <div style="float: right; margin-left: 20px;">
+      <form action="/list" method="get" class="sort-by">
+          <select name="sortBy" id="sortBySelect" style="color: rgb(86, 86, 86);">
+              <option value="regdate-desc" <% if (sortBy === 'regdate-desc') { %> selected <% } %> > 최신순</option>
+              <option value="title-asc" <% if (sortBy === 'title-asc') { %>selected<% } %> >오름차순</option>
+              <option value="title-desc" <% if (sortBy === 'title-desc') { %>selected<% } %> >내림차순</option>
+              <option value="likes-asc" <% if (sortBy === 'likes-asc') { %>selected<% } %> >추천순</option>
+              <option value="views-desc" <% if (sortBy === 'views-desc') { %>selected<% } %> >조회순</option>
+          </select>
+          <input type="submit" value="확인" class="sort-button">
+      </form>
+    </div>
+  </div>
+
+  <!-- 게시물 목록 -->
+  <div style="display: inline-flex; margin-top: 5px;">
+    <table border="1">
+        <thead>
+          <tr>
+            <td style="padding: 8px 6px 8px 6px;">No.</td>
+            <td>Title</td>
+            <td>Date</td>
+            <td>Writer</td>
+            <td>View</td>
+            <td>like</td>
+            <td >Del</td>
+          </tr>
+      </thead>
+      <tbody>
+          </tr >
+          <% for(let i=0; i<data.length; i++) { 
+            let result = data[i];
+            %>
+        <tr onclick="location.href='/view?board_idx=<%= result.board_idx%>'"> 
+          <td>
+            <%=(currentPage-1)*5+i+1%></a>
+          </td>
+          <td class="title">
+            <%=result.board_title%>
+          </td>
+          
+          <td style="min-width: 80px; font-size: 10px; color: #4a4a4a;">
+            <% 
+              
+              const regDate = new Date(result.board_regdate); 
+              
+              // 연도, 월, 일, 시간, 분을 가져오기
+              const year = String(regDate.getFullYear()).slice(-2);
+              const month = String(regDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, 2자리로 맞추기
+              const day = String(regDate.getDate()).padStart(2, '0'); // 2자리로 맞추기
+              const hours = String(regDate.getHours()).padStart(2, '0'); // 24시간 형식, 2자리로 맞추기
+              const minutes = String(regDate.getMinutes()).padStart(2, '0'); // 2자리로 맞추기
+              
+              // 날짜를 'YYYY MM DD ' 형식으로 조합
+              const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}`;
+            %>
+            <%=formattedDate%>
+          </td>
+
+          <td class="board_user">
+            <%=result.user_id%>
+          </td>
+          <td class="board_views">
+            <%=result.board_views%>
+          </td>
+          <td  class="board_views">
+            <%=result.board_like%>
+          </td>
+          <td class="board_delete">
+            <a style="text-decoration: none; color: rgb(95, 95, 95);" href="/writeDelete?board_idx=<%= result.board_idx%>">삭제</a>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 검색 옵션 선택 -->
+  <div style="display: ruby-text; text-align: right;">
+    <form action="/list" method="get" class="sort-by" style="margin-top: 20px;">
+      <select name="sortBy" id="sortBySelect">
+        <option value="board_title" <% if (sortBy === 'title') { %> selected <% } %> >제목</option>
+        <option value="board_content" <% if (sortBy === 'content') { %> selected <% } %> >내용</option>
+        <option value="user_id" <% if (sortBy === 'user') { %> selected <% } %> >작성자</option>
+        <option value="board_idx" <% if (sortBy === 'both') { %> selected <% } %> >제목 + 내용</option>
+      </select>
+
+      <!-- 검색어 입력 -->
+      <input type="text" name="query" id="searchQuery" placeholder="검색어를 입력하세요" value="<%= searchQuery %>">
+
+      <!-- 검색 버튼 -->
+      <button type="submit" class="sort-button">검색</button>
+    </form>
+  </div>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination">
+      <% if (currentPage > 1) { %>
+          <a href="/list?page=<%= currentPage - 1 %>&sortBy=<%= sortBy %>&query=<%= searchQuery %>"><</a>
+      <% } %>
+
+      <% for (let i = 1; i <= totalPages; i++) { %>
+          <% if (i === currentPage) { %>
+              <strong style="font-weight: bold;"><%= i %></strong>
+          <% } else { %>
+              <a href="/list?page=<%= i %>&sortBy=<%= sortBy %>&query=<%= searchQuery %>"><%= i %></a>
+          <% } %>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+          <a href="/list?page=<%= currentPage + 1 %>&sortBy=<%= sortBy %>&query=<%= searchQuery %>">></a>
+      <% } %>
+  </div>
+</body>
+</html>

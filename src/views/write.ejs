@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+    * {
+      font-family: "Gowun Batang", serif;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6; /* 행간 설정 */
+      letter-spacing: 0.05em; /* 자간 설정 */
+      text-align: justify;
+    }
+    body{
+      position: relative;
+      width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    h1 a {
+      color: #d95542;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    form div {
+      font-size: small;
+      position: relative;
+      padding: 5px;
+      display: block;
+    }
+    .subjectText {
+    width: 400px;
+    height: 32px;
+    font-size: 21px;
+    border: 0;
+    border-radius: 12px;
+    outline: none;
+    padding-left: 10px;
+    /* background-color: rgb(210, 210, 210); */
+  }
+  .file {
+    width: 400px;
+    height: 32px;
+    font-size: 13px;
+    border: 0;
+    border-radius: 12px;
+    outline: none;
+    padding-left: 10px;
+    background-color: none;
+    float: right;
+  }
+  .content {
+    border: none;
+    background-color: rgba(210, 210, 210, 0.73);
+    width: 700px;
+    height: 300px;
+    resize: none;
+    border-radius: 15px;
+    font-size: 15px;
+    padding: 20px 0 20px 20px;
+    margin-bottom: 10px;
+  }
+
+  .content:focus {
+  outline: none;
+}
+
+button.submitButton {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  font-weight: 400;
+  background-color: #8285b7; 
+  color: white !important;
+  cursor: pointer;
+  padding: 5px 15px 5px 15px;
+  width: auto;
+  float: right;
+  margin: 0 10px 0 0 ;
+}
+button.backButton {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  font-weight: 400;
+  background-color: #8285b7; 
+  color: white !important;
+  cursor: pointer;
+  padding: 5px 8px 6px 8px;
+  width: auto;
+
+}
+button:hover {
+  background-color: #d3d3d3;
+}
+
+#subject {
+  display: flex !important;
+  align-items: center;
+}
+.file {
+  position: absolute;
+}
+.preview {
+  z-index: -1;
+}
+
+
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="http://localhost:3000/list">BOARD</a>
+    <hr  style="margin: 5px 0 5px 0px; position: relative;">
+  </h1>
+  <button class="backButton" type="submit" onclick="location.href='/list'" style="margin: 0 0 10px 0px;">◀️</button>
+
+
+  <form action="/writeProc" method="post" enctype="multipart/form-data">
+    <div id="subject">&nbsp;&nbsp;&nbsp;<input maxlength='20' class="subjectText" type="text" name="subject" placeholder="제목을 입력해주세요." required></div>
+    
+    <div class="contentAlign">&nbsp;&nbsp;&nbsp;<textarea class="content" name="content" placeholder="내용을 입력해주세요." ></textarea></div>
+
+    <div class="img-preview"></div>
+    <div>
+      <input class="file" type="file" id="myFile" name="myFiles" multiple accept="image/*" onchange="previewFiles(event);" required>
+      <div style="z-index: -1; margin-top: 30px;" id="previewContainer" ></div>
+
+    </div>
+    
+    <button class="submitButton" type="submit">등록</button>
+  </form>
+
+    <script>
+          function previewFiles(event) {
+            var previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = ''; // 이전 미리보기 초기화
+
+            var files = event.target.files;
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = (function (file) {
+                    return function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.style.maxWidth = '90px'; // 미리보기 이미지의 최대 너비 지정
+                        imgElement.style.maxHeight = '90px'; // 미리보기 이미지의 최대 높이 지정
+                        imgElement.style.margin = '5px'; // 미리보기 이미지의 최대 높이 지정
+                        imgElement.classList.add('preview-image');
+                        imgElement.src = e.target.result; // 이미지 URL 설정
+                        previewContainer.appendChild(imgElement); // 미리보기 영역에 이미지 추가
+                    };
+                })(file);
+
+                reader.readAsDataURL(file); // 파일을 읽어 데이터 URL로 변환
+            }
+        }
+
+
+    </script>
+</body>
+</html>
+

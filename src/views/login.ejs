@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+    * {
+      font-family: "Gowun Batang", serif;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6; /* 행간 설정 */
+      letter-spacing: 0.05em; /* 자간 설정 */
+      text-align: justify;
+    }
+    body{
+      position: relative;
+      width: 700px;
+      margin: 0 auto;
+    }
+    li {
+      list-style: none;
+      display: inline;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    h1 a {
+      color: #d95542;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    h2 {
+      color: #8285b7;
+    }
+    h4 {
+      margin: 0;
+      color: rgb(156, 156, 156);
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="/">BOARD</a>
+  </h1>
+  <hr style="margin: 5px 0 5px 0;">
+  <h2>JOIN / LOGIN</h2>
+  
+  <div style="display: flex; margin: 10px 20px 10px 20px;">
+    <div style="border: 1px solid #8285b7; padding: 10px; margin: 10px;">
+      <h4>JOIN</h4>
+      <form action="/join" method="post" style="display: flex;">
+        <div>
+          <div  style="margin: 9px;">ID <input maxlength='13' type="text" name="id" placeholder="아이디를 입력하세요." required></div>
+          <div>PW <input type="text" name="password" placeholder="비밀번호를 입력하세요." required></div>
+        </div>
+        <button type="submit" style="margin: 10PX 0 0 10px; padding: 10px;">회원가입</button>
+      </form>
+    </div>
+
+
+    <div style="border: 1px solid #8285b7; padding: 10px; margin: 10px;">
+      <h4>LOGIN</h4>
+      <form action="/login" method="post" style="display: flex;">
+        <div>
+          <div style="margin: 9px;">ID <input type="text" name="id" placeholder="아이디를 입력하세요." required></div>
+          <div>PW <input type="text" name="password" placeholder="비밀번호를 입력하세요." required></div>
+        </div>
+        <button type="submit" style="margin: 10PX  0 0 10px; padding: 10px;">로그인</button>
+      </form>
+    </div>
+  </div>

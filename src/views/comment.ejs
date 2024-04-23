@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>view</title>
+  <style>
+    body{
+      display: inline-block;
+    }
+    h1 {
+      margin: 0;
+    }
+    h2 {
+      margin: 0;
+      margin: 0 0 10px 0px;
+    }
+    form {
+      display: inline;
+    }
+
+    h3 {
+      margin: 0 300px 10px 0px;
+      color: rgb(0, 68, 68);
+    }
+    input {
+    width: -webkit-fill-available;
+    height: 3.25em;
+    resize: none;
+    position: relative;
+    margin: 10px;
+  }
+  .comment {
+    border: 1px solid darkcyan;
+    border-radius: 10px 10px 10px 10px;  ;
+    position: relative;
+    display: inline-block;
+    padding: 0 5px 5px 0;
+  }
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="http://localhost:3000/" style="color: darkcyan; text-decoration: none;">게시판</a>
+    <hr>
+  </h1>
+
+    <h2>작성한 게시글</h2>
+    <button type="submit" onclick="location.href='/list'" style="margin: 0 0 10px 0px;">◀️</button>
+    <form action="/like?board_idx=<%=data.board_idx%>" method="POST">
+        <button type="submit"  style="position: static; float: right;">Like</button>
+        <input type="hidden" name="postId" value="result.board_idx">
+    <form>
+    <form id="viewFrm" action="" method="post" >
+      <div id="subject">제목 : </div>
+      <div id="writer">작성자 : </div>
+      <div id="date">작성일 : </div>
+      <div id="content">내용 :  </div>
+    </form>
+    
+    <div  style="margin: 10px 0 0 0px;">
+      <form id="modifyForm" action="/modify?board_idx=<%=data.board_idx%>" method="POST">
+        <button type="submit">수정</button>
+      </form>
+
+      <form id="deleteForm" action="/viewDelete?board_idx=<%=data.board_idx%>" method="POST">
+        <button type="submit">삭제</button>
+      </form>
+
+    <hr  style="margin: 20px 0 20px 0px;">
+  </div> 
+    
+
+  <div class="comment">
+    <h3 style="padding: 10px 0 0 10px; margin-bottom: 0;"> Comments </h3>
+    <form id="commentFrm" action="/comment?board_idx=<%=data.board_idx%>" method="POST">
+      <input type="text" name="content"  placeholder="내용을 입력해주세요." required>
+      <button style="position: static; float: right; ">등록</button>
+    </form>
+    
+    <!-- 댓글 목록  -->
+      <% if (comments.length > 0) { %>
+        <ul style="padding-left: 10px;">
+          <% comments.forEach(function(comment) { %>
+            <div>
+              <div style="display: flex; ">
+                <div style="margin: 10px;"><%= comment.comment_idx %></div>
+                <div style="width: 23px; height: 23px; border-radius: 10px 10px; background-color: rgb(120, 120, 120); margin: 10px;"></div>
+                <div style="margin: 8px 0 0 5px;"><%= comment.user_id %></div>
+              </div>
+              <div style="margin: 0 0 0 40px;"><%= comment.comment %></div>
+              <hr>
+            </div>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <div>
+          <br>
+          <p style="margin-left: 15px;">댓글이 없습니다.</p>
+        </div>
+      <% } %>
+      </div>
+
+</body>
+</html>

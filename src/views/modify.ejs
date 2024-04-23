@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+    * {
+      font-family: "Gowun Batang", serif;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6; /* 행간 설정 */
+      letter-spacing: 0.05em; /* 자간 설정 */
+      text-align: justify;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    h1 a {
+      color: #d95542;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    body{
+      position: relative;
+      width: 700px;
+      margin: 0 auto;
+    }
+    form div {
+      font-size: small;
+      position: relative;
+      padding: 5px;
+    }
+    input {
+    width: 700px;
+    height: 32px;
+
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    /* background-color: rgb(210, 210, 210); */
+  }
+  .content {
+    border: none;
+    background-color:rgb(210, 210, 210, 0.73);
+    width: 700px;
+    height: 100px;
+    resize: none;
+    border-radius: 15px;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .subject {
+    font-size: 21px;
+    color: #898989;
+    margin-bottom: 10px;
+  }
+  .content:focus {
+  outline: none;
+}
+
+button.modifyBotton {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  font-weight: 400;
+  background-color: #8285b7; 
+  color: white !important;
+  cursor: pointer;
+  padding: 5px 15px 5px 15px;
+  width: auto;
+  float: right;
+}
+button.backButton {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  border-radius: 4px;
+  font-weight: 400;
+  background-color: #8285b7; 
+  color: white !important;
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  width: auto;
+}
+button:hover {
+  background-color: #d3d3d3;
+}
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="http://localhost:3000/list">BOARD</a>
+    <hr  style="margin: 5px 0 5px 0px; position: relative;">
+  </h1>
+  
+  <button class="backButton" type="submit" onclick="location.href='/list'" style="margin: 0 0 10px 0px;">◀️</button>
+
+  <form id="modifyForm" action="/modifyProc?board_idx=<%=data.board_idx%>" method="post" enctype="multipart/form-data">
+      <div> <input maxlength='20' class="subject" type="text" name="subject"  value="<%=data.board_title%>" required></div>
+        <textarea class="content" name="content"  placeholder="내용을 입력해주세요."><%=data.board_content%></textarea>
+        <br>    
+
+        <div><input type="file" id="myFile" name="myFiles" multiple accept="image/*" onchange="previewFiles(event);" required></div>
+        <div style="z-index: -1; margin-top: 0;" id="previewContainer" ></div>
+          <button class="modifyBotton" type="submit">수&nbsp;정</button>
+
+  </form>
+
+
+  <script>
+    // 폼 제출 이벤트 핸들러
+    document.getElementById('modifyForm').addEventListener('submit', function(event) {
+      // 폼이 실제로 제출되지 않도록 기본 동작을 중지
+      event.preventDefault();
+      
+      // 수정 완료 알림 표시
+      alert('게시물이 수정되었습니다.');
+      
+      // 폼 제출
+      this.submit();
+    });
+
+      function previewFiles(event) {
+            var previewContainer = document.getElementById('previewContainer');
+            previewContainer.innerHTML = ''; // 이전 미리보기 초기화
+
+            var files = event.target.files;
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = (function (file) {
+                    return function (e) {
+                        var imgElement = document.createElement('img');
+                        imgElement.style.maxWidth = '90px'; // 이미지의 최대 너비 
+                        imgElement.style.maxHeight = '90px'; // 이미지의 최대 높이 
+                        imgElement.style.margin = '5px'; // 이미지의 최대 높이 
+                        imgElement.classList.add('preview-image');
+                        imgElement.src = e.target.result; // 이미지 URL 설정
+                        previewContainer.appendChild(imgElement); // 미리보기 영역에 이미지 추가
+                    };
+                })(file);
+
+                reader.readAsDataURL(file);
+            }
+        }
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!-- views/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 목록</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>게시물 목록</h1>
+
+    <form action="/result" method="GET">
+        <input type="text" name="search" placeholder="검색어를 입력하세요">
+        <button type="submit">검색</button>
+    </form>
+
+    <% if (posts.length > 0) { %>
+        <ul>
+            <% posts.forEach(post => { %>
+                <li><a href="/post/<%= post.id %>"><%= post.board_title %></a></li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>검색 결과가 없습니다.</p>
+    <% } %>
+
+    <% if (search) { %>
+        <p>검색어: <%= search %></p>
+    <% } %>
+</body>
+</html>

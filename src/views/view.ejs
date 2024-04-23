@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>view</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+    * {
+      font-family: "Gowun Batang", serif;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.6; /* 행간 설정 */
+      letter-spacing: 0.05em; /* 자간 설정 */
+      text-align: justify;
+    }
+      
+    body{
+      position: relative;
+      width: 700px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+    h1 a {
+      color: #d95542;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    h2 {
+      margin: 0;
+      margin: 0 0 10px 0px;
+    }
+    #date {
+      font-size: small;
+      font-weight: 100;
+      color: #6c6c6c;
+      text-align: end;
+    }
+
+    form {
+      display: inline;
+    }
+    
+    #subject {
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 15px;
+      padding-left: 15px;
+      position: relative;
+      padding: 5px 5px 0 10px;
+      display: flex;
+      align-items: center;
+    }
+    #subject div {
+      height: 32px;
+      font-size: 23px;
+      border: 0;
+      outline: none;
+      display: flex;
+      align-items: center;
+    }
+    #writer {
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 15px;
+      padding-left: 15px;
+      position: relative;
+      padding: 0 5px 0 10px;
+      display: flex;
+      align-items: center;
+    }
+    #writer div {
+      height: 32px;
+      font-size: 15px;
+      border: 0;
+      outline: none;
+      padding: 0 10px 0 10px;
+      display: flex;
+      align-items: center;
+      margin-left: 13px;
+    }
+    #content {
+      font-weight: 700;
+      border-radius: 15px;
+      padding-left: 15px;
+      position: relative;
+      padding: 5px 5px 5px 10px;
+      align-items: center;
+    }
+    .titleContent{
+      font-weight: 400;
+    }
+    #content div {
+      width: 660px;
+      font-size: 15px;
+      margin: 10px auto;
+    }
+    img {
+      border-radius: 5px  5px  5px  5px ;
+      width: 340px
+    }
+    .contentImage {
+      margin: 10px;
+      text-align: center;
+    }
+    h3 {
+      margin: 0 300px 10px 0px;
+      color: rgb(0, 68, 68);
+    }
+    input {
+    width: -webkit-fill-available;
+    height: 3.25em;
+    resize: none;
+    position: relative;
+    margin: 10px;
+    }
+    .comment {
+      border: 1px solid #8285b7;
+      border-radius: 10px 10px 10px 10px;
+      position: relative;
+      display: inline-block;
+      padding: 5px;
+      width: 700px;
+      margin-top: 20px;
+    }
+    .comment_css {
+      width: 700px;
+      background-color: rgb(230, 230, 230);
+      border-radius: 10px 10px;
+      padding: 5px 8px 5px 5px;
+      margin-top: 5px;
+      display: inline-block;
+    }
+    button{
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      border-radius: 4px;
+      font-weight: 400;
+      background-color: #8285b7; 
+      color: white !important;
+      cursor: pointer;
+      padding: 5px 10px 5px 10px;
+      width: auto;
+    }
+
+    .likeButton {
+      background-color: #8285b785;
+
+    }
+    button:hover {
+      background-color: #d3d3d3;
+    }
+    .commentDate
+    {
+      font-size: 12px;
+      color: #6c6c6c;
+      margin: 5px 0 0 0 ;
+    }
+    .commentContent {
+      color: #626262;
+      font-size: 17px;
+    }
+    .commentTextarea
+    {
+      border: 1px solid darkcyan;
+      border-radius: 5px  5px  5px  5px ;
+      position: relative;
+      display: block;
+      padding: 5px;
+      width: 650px;
+      margin: 5px 5px 5px 35px;
+      resize: none;
+      height: 6.25em;
+    }
+    
+    
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="http://localhost:3000/list">BOARD</a>
+    <hr style="margin: 5px 240px 25px 240px;">
+  </h1>
+
+  <button type="submit" onclick="location.href='/list'" style="margin: 0 0 10px 0px;">◀️</button>
+
+  <form id="viewFrm" action="" method="post" >
+      <div id="subject"> 제목 &nbsp;&nbsp;&nbsp;<div class="titleContent"><%=data.board_title%></div></div>
+      <div class="writerContent">
+        <div id="writer">작성자 <div class="titleContent" ><%=data.user_id%></div></div>
+        <hr style="margin: 5px 0 5px 0;">
+        
+        <div id="content"> 
+          <div class="titleContent"><%=data.board_content%>
+              <div class="contentImage">
+                  <% if (imageUrl) { %>
+                    <% imageUrl.forEach((image) => { %>
+                      <img src="<%= image %>" alt="게시물 이미지">
+                    <% }); %>
+                  <!-- <p><%= imageUrl %></p> -->
+                <% } else { %>
+                  <p>이미지가 없습니다.</p>
+                <% }; %>
+            </div>
+          </div>
+        </div>
+      </div>  
+
+      <div id="date"  class="titleContent" ><% 
+                    // comment_regdate를 JavaScript의 Date 객체로 변환
+                    const regDate = new Date(data.board_regdate);
+                    
+                    // 연도, 월, 일, 시간, 분을 가져오기
+                    const year = regDate.getFullYear();
+                    const month = String(regDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, 2자리로 맞추기
+                    const day = String(regDate.getDate()).padStart(2, '0'); // 2자리로 맞추기
+                    const hours = String(regDate.getHours()).padStart(2, '0'); // 24시간 형식, 2자리로 맞추기
+                    const minutes = String(regDate.getMinutes()).padStart(2, '0'); // 2자리로 맞추기
+                    
+                    // 날짜를 'YYYY MM DD HH:MM' 형식으로 조합
+                    const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
+                  %>
+                  <%=formattedDate%>
+      </div>
+
+      <div  style="margin-top: 10px; float:  right;">
+      <form action="/like?board_idx=<%=data.board_idx%>" method="POST">
+          <!-- <button class="likeButton" type="submit"  style="position: static;">추천 &nbsp;<%=data.board_like%></button> -->
+          <input type="hidden" name="postId" value="result.board_idx">
+      </form>
+
+      <form id="contentLikeForm" action="/like?board_idx=<%=data.board_idx%>" method="POST">
+        <button class="likeButton" type="submit"  style="position: static;" type="submit">추천 &nbsp;<%=data.board_like%></button>
+        <input type="hidden" name="postId" value="result.board_idx">
+      </form>
+      
+      <form id="" action="/modify?board_idx=<%=data.board_idx%>" method="POST">
+        <button type="submit">수정</button>
+      </form>
+
+      <form id="deleteForm" action="/viewDelete?board_idx=<%=data.board_idx%>" method="POST">
+        <button type="submit">삭제</button>
+      </form>
+    </div> 
+    
+    </form>
+
+
+    <!-- 댓글 입력 폼 -->
+    <div>
+      <div class="comment">
+        <h3 style="padding: 10px 0 0 10px; margin-bottom: 0;"> Comments </h3>
+        <form id="commentFrm" action="/comment?board_idx=<%=data.board_idx%>" method="POST">
+          <input type="text" name="content"  placeholder="내용을 입력해주세요." required>
+          <button style="position: static; float: right; ">등록</button>
+        </form>
+      </div>
+
+    <!-- 댓글 목록  -->
+      <% if (comments.length > 0) { %>
+        <ul style="padding:10px 10px 10px 0; display: grid;">
+          <% comments.forEach(function(comment) { %>
+            <div class="comment_css">
+              <div style="display: flex; align-items: center ">
+                <div style="margin: 10px;"><%= comment.row_num %></div>
+                <div style="width: 23px; height: 23px; border-radius: 10px 10px; background-color: rgb(120, 120, 120); margin: 10px;"></div>
+                <div style="font-weight: 700;"><%= comment.user_id %></div>
+              </div>
+
+                <div id="comment_<%= comment.comment_idx %>" style="margin: 0 0 0 40px; display: block;">
+                  
+                    <div class="commentContent"><%= comment.comment %></div>
+                    <div>
+                        <% 
+                        // comment_regdate를 JavaScript의 Date 객체로 변환
+                        const regDate = new Date(comment.comment_regdate);
+                        
+                        // 연도, 월, 일, 시간, 분을 가져오기
+                        const year = regDate.getFullYear();
+                        const month = String(regDate.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1, 2자리로 맞추기
+                        const day = String(regDate.getDate()).padStart(2, '0'); // 2자리로 맞추기
+                        const hours = String(regDate.getHours()).padStart(2, '0'); // 24시간 형식, 2자리로 맞추기
+                        const minutes = String(regDate.getMinutes()).padStart(2, '0'); // 2자리로 맞추기
+                        
+                        // 날짜를 'YYYY MM DD HH:MM' 형식으로 조합
+                        const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
+                        %>
+                    <div class="commentDate"><%=  formattedDate  %></div>
+                  </div>
+
+                  <button  style="font-size: 10px; display: inline; margin: 5px 5px 5px 0; " onclick="showEditForm('<%=comment.comment_idx %>')">수정</button>
+                  
+                  <!-- 댓글 좋아요 기능 -->
+                  <form id="likeForm" action="/commentlikes?comment_idx=<%=comment.comment_idx%>" method="POST">
+                    <input type="hidden" name="board_idx" value="<%= data.board_idx %>">
+                    <input type="hidden" name="comment_idx" value="<%= comment.comment_idx %>">
+                    <button class="likeButton" type="submit"  style="margin: 5px 5px 5px 0; font-size: 10px; display: inline; float: inline-end;">추천 &nbsp;<%=comment.comment_like%></button>
+                  </form>
+                  
+                  <!-- 댓글 삭제 기능 -->
+                  <form id="commentDelete" action="/commentDelete?comment_idx=<%=comment.comment_idx%>" method="POST">
+                    <input type="hidden" name="board_idx" value="<%= data.board_idx %>">
+                    <input type="hidden" name="comment_idx" value="<%= comment.comment_idx %>">
+                    <button type="submit" style="float: left; margin: 5px 5px 5px 0; font-size: 10px; display: inline;">삭제</button>
+                  </form>
+                  
+                </div>
+                
+                <!-- 댓글 수정 폼 -->
+                <div id="editForm_<%=comment.comment_idx %>" style="display: none;">
+                  <form id="modifyForm" action="/commentFrm?comment_idx=<%=comment.comment_idx%>" method="POST">
+                    <input type="hidden" name="board_idx" value="<%= data.board_idx %>">
+                    <input type="hidden" name="comment_idx" value="<%= comment.comment_idx %>">
+                    <textarea class="commentTextarea" name="comment" placeholder="내용을 입력해주세요." required><%= comment.comment %></textarea>
+                    <button id="" style="float: inline-end; position: static;  margin: 0 5px 5px 0; font-size: 10px;" type="submit">수정 완료</button>
+                </form>
+              </div>
+            </div>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <div>
+          <br>
+          <p style="margin-left: 15px;">댓글이 없습니다.</p>
+        </div>
+      <% } %>
+      </div>
+
+        <script>
+          // 댓글 등록 이벤트
+          document.getElementById('commentFrm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼이 실제로 제출되지 않도록 기본 동작을 중지
+            alert('댓글을 등록하였습니다.');
+            this.submit();
+          });
+
+          // 수정 버튼을 클릭할 때 호출되는 함수
+          function showEditForm(commentId) {
+            // 기존 댓글 부분을 숨김
+            const commentDiv = document.getElementById(`comment_${commentId}`);
+            commentDiv.style.display = 'none';
+            
+            // 수정 폼 부분을 보임
+            const editForm = document.getElementById(`editForm_${commentId}`);
+            editForm.style.display = 'block';
+          }
+          
+          
+          // 게시물 추천 이벤트
+          const form = document.getElementById('contentLikeForm')
+            form.addEventListener('submit', function(event) {
+              event.preventDefault();
+              alert('해당 게시물에 좋아요를 누르셨습니다.');
+              this.submit();
+          });
+
+          // 댓글 추천 이벤트  
+          const likeForm = document.getElementById('likeForm')
+            if(likeForm !== null) {
+              likeForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('해당 댓글에 좋아요를 누르셨습니다.');
+                this.submit();
+              });
+            }
+          
+          // 댓글 삭제 이벤트  
+          const commentDelete = document.getElementById('commentDelete')
+            if(likeForm !== null) {
+              commentDelete.addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('해당 댓글이 삭제되었습니다.');
+                this.submit();
+              });
+            }
+
+          // 댓글 수정 이벤트
+          const modifyForm = document.getElementById('modifyForm')
+            if(likeForm !== null) { 
+              modifyForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('해당 댓글이 수정되었습니다.');
+                this.submit();
+              });
+            }
+  </script>
+</body>
+</html>
