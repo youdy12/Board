@@ -17,13 +17,13 @@ var conn = {
     password: 'root',
     database: '게시판',
 };
+// @ts-ignore
 app.all('/*', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
-출처: https: //beagle-dev.tistory.com/194 [언젠간 되어있겠지:티스토리]
- 
+
 // HTML 파일을 EJS 템플릿으로 렌더링하기 위한 엔진 설정
 app.engine('html', require('ejs').renderFile);
 // Express 애플리케이션의 템플릿 엔진을 EJS로 설정
@@ -58,11 +58,13 @@ connection.connect(function (err) {
     }
     console.log('Connected to database');
 });
+// @ts-ignore
 app.get('/', function (req, res) {
     res.render('index.html');
 });
 // 게시판 목록 가져오기
 app.get('/list', function (req, res) {
+    // @ts-ignore
     var page = parseInt(req.query.page) || 1; // 요청된 페이지, 기본값은 1
     var limit = 10; // 페이지당 보여줄 게시물 수
     var offset = (page - 1) * limit; // 데이터베이스에서 가져올 시작 인덱스
@@ -72,33 +74,39 @@ app.get('/list', function (req, res) {
     var params = [];
     // 세션에 검색어 저장
     var searchQuery = req.query.query || '';
+    // @ts-ignore
     req.session.searchQuery = searchQuery;
     // 검색어에 따라 쿼리 조건 설정
     if (searchQuery) {
         if (req.query.sortBy === 'board_title') {
             query += ' WHERE board_title LIKE ?';
             countQuery += ' WHERE board_title LIKE ?';
+            // @ts-ignore
             params.push("%".concat(searchQuery, "%"));
         }
         else if (req.query.sortBy === 'board_content') {
             query += ' WHERE board_content LIKE ?';
             countQuery += ' WHERE board_content LIKE ?';
+            // @ts-ignore
             params.push("%".concat(searchQuery, "%"));
         }
         else if (req.query.sortBy === 'user_id') {
             query += ' WHERE user_id LIKE ?';
             countQuery += ' WHERE user_id LIKE ?';
+            // @ts-ignore
             params.push("%".concat(searchQuery, "%"));
         }
         else if (req.query.sortBy === 'board_idx') {
             query += ' WHERE board_content LIKE ? OR board_title LIKE ?';
             countQuery += ' WHERE board_content LIKE ? OR board_title LIKE ?';
+            // @ts-ignore
             params.push("%".concat(searchQuery, "%"), "%".concat(searchQuery, "%"));
         }
         else {
             // 기본 정렬 옵션은 게시물 번호 내림차순
             query += ' WHERE board_title LIKE ?';
             countQuery += ' WHERE board_title LIKE ?';
+            // @ts-ignore
             params.push("%".concat(searchQuery, "%"));
         }
     }
@@ -124,9 +132,11 @@ app.get('/list', function (req, res) {
     }
     query += ' LIMIT ? OFFSET ?';
     params.push(limit, offset);
+    // @ts-ignore
     connection.query(query, params, function (error, results, fields) {
         if (error) {
             console.error('Error fetching posts:', error);
+            // @ts-ignore
             res.status(500).json({ message: 'Error fetching posts' });
             return;
         }
@@ -135,6 +145,7 @@ app.get('/list', function (req, res) {
         connection.query(countQuery, params, function (error, countResult) {
             if (error) {
                 console.error('Error fetching total post count:', error);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error fetching total post count' });
                 return;
             }
@@ -167,12 +178,14 @@ app.get('/writeDelete', function (req, res) {
     connection.query(query, [boardId], function (err, results) {
         if (err) {
             console.error('Error finding comment:', err);
+            // @ts-ignore
             res.status(500).json({ message: 'Error finding comment' });
             return;
         }
         // 게시글이 존재하지 않는 경우
         var board = results[0]; // 결과 배열의 첫 번째 요소를 가져옴
         if (!board) {
+            // @ts-ignore
             res.status(404).json({ message: 'Comment not found' });
             return;
         }
@@ -183,9 +196,11 @@ app.get('/writeDelete', function (req, res) {
         }
         // 게시글 삭제 SQL 쿼리
         var deleteQuery = 'DELETE FROM board WHERE board_idx = ?';
+        // @ts-ignore
         connection.query(deleteQuery, [boardId], function (err, results) {
             if (err) {
                 console.error('Error deleting comment:', err);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error deleting comment' });
                 return;
             }
@@ -194,14 +209,18 @@ app.get('/writeDelete', function (req, res) {
     });
 });
 // 게시물 작성
+// @ts-ignore
 app.get('/write', requireLogin, function (req, res) {
     res.render('write', { title: "게시판 글 쓰기" });
 });
 var storage = multer.diskStorage({
+    // @ts-ignore
     destination: function (req, file, done) {
         done(null, 'files/'); // 파일 저장 경로
     },
+    // @ts-ignore
     filename: function (req, file, done) {
+        // @ts-ignore
         var randomID = (0, uuid4_1.default)();
         var ext = path.extname(file.originalname); // 파일 이름
         var basename = path.basename(file.originalname, ext);
@@ -219,12 +238,14 @@ app.post('/writeProc', upload.array('myFiles', 5), function (req, res) {
         return res.status(400).send('No files uploaded');
     }
     // Process uploaded files (extract filenames)
+    // @ts-ignore
     var imageUrls = files.map(function (file) {
         return file.filename; // Assuming file.filename contains the generated filename
     });
     var imageUrlString = imageUrls.join(',');
     var sql = "INSERT INTO board (board_title, board_content, board_regdate, user_id, board_image) VALUES (?, ?, NOW(), ?, ?)";
     var values = [subject, content, userId, imageUrlString];
+    // @ts-ignore
     connection.query(sql, values, function (err, result) {
         if (err) {
             console.error('Error inserting data:', err);
@@ -271,6 +292,7 @@ app.get('/view', function (req, res) {
         var updateViewsSql = "UPDATE board SET board_views = board_views + 1 WHERE board_idx = ?";
         // 쿼리에 전달할 매개변수
         var idx = req.query.board_idx;
+        // @ts-ignore
         connection.query(updateViewsSql, [idx], function (err, updateResult) {
             if (err) {
                 console.error('Error updating views:', err);
@@ -300,12 +322,14 @@ app.post('/viewDelete', function (req, res) {
     connection.query(query, [boardId], function (err, results) {
         if (err) {
             console.error('Error finding comment:', err);
+            // @ts-ignore
             res.status(500).json({ message: 'Error finding comment' });
             return;
         }
         var board = results[0]; // 결과 배열의 첫 번째 요소를 가져옴
         // 게시물이 존재하지 않는 경우
         if (!board) {
+            // @ts-ignore
             res.status(404).json({ message: 'Comment not found' });
             return;
         }
@@ -316,9 +340,11 @@ app.post('/viewDelete', function (req, res) {
         }
         // 게시물이 삭제 SQL 쿼리
         var deleteQuery = 'DELETE FROM board WHERE board_idx = ?';
+        // @ts-ignore
         connection.query(deleteQuery, [boardId], function (err, results) {
             if (err) {
                 console.error('Error deleting comment:', err);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error deleting comment' });
                 return;
             }
@@ -329,19 +355,23 @@ app.post('/viewDelete', function (req, res) {
 // 댓글 삭제
 app.post('/commentDelete', requireLogin, function (req, res) {
     var userId = req.session.user; // 현재 로그인된 사용자의 ID
+    // @ts-ignore
     var boardIdx = req.body.board_idx;
+    // @ts-ignore
     var commentIdx = req.body.comment_idx;
     // 댓글 찾기 SQL 쿼리
     var query = 'SELECT * FROM comment WHERE comment_idx = ?';
     connection.query(query, [commentIdx], function (err, results) {
         if (err) {
             console.error('Error finding comment:', err);
+            // @ts-ignore
             res.status(500).json({ message: 'Error finding comment' });
             return;
         }
         // 댓글이 존재하지 않는 경우
         var comment = results[0]; // 결과 배열의 첫 번째 요소를 가져옴
         if (!comment) {
+            // @ts-ignore
             res.status(404).json({ message: 'Comment not found' });
             return;
         }
@@ -352,9 +382,11 @@ app.post('/commentDelete', requireLogin, function (req, res) {
         }
         // 댓글 삭제 SQL 쿼리
         var deleteQuery = 'DELETE FROM comment WHERE comment_idx = ?';
+        // @ts-ignore
         connection.query(deleteQuery, [commentIdx], function (err, results) {
             if (err) {
                 console.error('Error deleting comment:', err);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error deleting comment' });
                 return;
             }
@@ -363,14 +395,17 @@ app.post('/commentDelete', requireLogin, function (req, res) {
             connection.query(modifiedDataSql, [boardIdx], function (err, modifiedResults) {
                 if (err) {
                     console.error('Error fetching modified data:', err);
+                    // @ts-ignore
                     res.status(500).json({ message: 'Error fetching modified data' });
                     return;
                 }
                 if (modifiedResults.length === 0) {
                     console.error('No modified data found');
+                    // @ts-ignore
                     res.status(404).json({ message: 'No modified data found' });
                     return;
                 }
+                // @ts-ignore
                 var boardData = modifiedResults[0]; // 첫 번째 결과를 사용
                 res.redirect("/view?board_idx=".concat(boardIdx));
             });
@@ -391,12 +426,14 @@ app.post('/like', requireLogin, function (req, res) {
         if (results.length > 0) { // 이미 좋아요를 누른 경우
             console.log('Duplicate like');
             var idx = req.query.board_idx;
+            // @ts-ignore
             res.send("<script>alert('\uC774\uBBF8 \uC88B\uC544\uC694\uB97C \uB204\uB974\uC168\uC2B5\uB2C8\uB2E4.'); window.location.href='/view?board_idx=".concat(idx, "';</script>"));
         }
         else {
             // 좋아요를 누르지 않은 경우
             // 좋아요를 기록하는 쿼리 실행
             var insertQuery = 'INSERT INTO likes (user_id, board_idx) VALUES (?, ?)';
+            // @ts-ignore
             connection.query(insertQuery, [userId, boardId], function (err, results) {
                 if (err) {
                     console.error('Error inserting like:', err);
@@ -407,9 +444,11 @@ app.post('/like', requireLogin, function (req, res) {
             });
             var idx = req.query.board_idx;
             var sql = "UPDATE board SET board_like = board_like + 1 WHERE board_idx = ?";
+            // @ts-ignore
             connection.query(sql, [idx], function (err, results) {
                 if (err) {
                     console.error('Error deleting post:', err);
+                    // @ts-ignore
                     res.status(500).json({ message: 'Error deleting post' });
                     return;
                 }
@@ -419,16 +458,20 @@ app.post('/like', requireLogin, function (req, res) {
                 connection.query(modifiedDataSql, [boardId], function (err, modifiedResults) {
                     if (err) {
                         console.error('Error fetching modified data:', err);
+                        // @ts-ignore
                         res.status(500).json({ message: 'Error fetching modified data' });
                         return;
                     }
                     if (modifiedResults.length === 0) {
                         console.error('No modified data found');
+                        // @ts-ignore
                         res.status(404).json({ message: 'No modified data found' });
                         return;
                     }
+                    // @ts-ignore
                     var boardData = modifiedResults[0]; // 첫 번째 결과를 사용
                     // res.render('view', { 'data': boardData });
+                    // @ts-ignore
                     res.redirect("/view?board_idx=".concat(idx));
                 });
             });
@@ -437,7 +480,9 @@ app.post('/like', requireLogin, function (req, res) {
 });
 app.post('/commentlikes', requireLogin, function (req, res) {
     var userId = req.session.user; // 세션에서 사용자 ID 가져오기
+    // @ts-ignore
     var boardIdx = req.body.board_idx;
+    // @ts-ignore
     var commentIdx = req.body.comment_idx;
     // 좋아요를 누른 기록이 있는지 확인하는 쿼리
     var query = 'SELECT * FROM commentlikes WHERE user_id = ? AND comment_idx = ?';
@@ -455,6 +500,7 @@ app.post('/commentlikes', requireLogin, function (req, res) {
             // 좋아요를 누르지 않은 경우
             // 좋아요를 기록하는 쿼리 실행
             var insertQuery = 'INSERT INTO commentlikes (user_id, comment_idx) VALUES (?, ?)';
+            // @ts-ignore
             connection.query(insertQuery, [userId, commentIdx], function (err, results) {
                 if (err) {
                     console.error('Error inserting like:', err);
@@ -465,9 +511,11 @@ app.post('/commentlikes', requireLogin, function (req, res) {
             });
             var idx = req.query.comment_idx;
             var sql = "UPDATE comment SET comment_like = comment_like + 1 WHERE comment_idx = ?";
+            // @ts-ignore
             connection.query(sql, [idx], function (err, results) {
                 if (err) {
                     console.error('Error deleting post:', err);
+                    // @ts-ignore
                     res.status(500).json({ message: 'Error deleting post' });
                     return;
                 }
@@ -478,14 +526,17 @@ app.post('/commentlikes', requireLogin, function (req, res) {
                 connection.query(modifiedDataSql, [boardIdx], function (err, modifiedResults) {
                     if (err) {
                         console.error('Error fetching modified data:', err);
+                        // @ts-ignore
                         res.status(500).json({ message: 'Error fetching modified data' });
                         return;
                     }
                     if (modifiedResults.length === 0) {
                         console.error('No modified data found');
+                        // @ts-ignore
                         res.status(404).json({ message: 'No modified data found' });
                         return;
                     }
+                    // @ts-ignore
                     var boardData = modifiedResults[0]; // 첫 번째 결과를 사용
                     res.redirect("/view?board_idx=".concat(boardIdx));
                 });
@@ -504,11 +555,13 @@ app.post('/modify', function (req, res) {
         var board = results[0]; // 결과 배열의 첫 번째 요소를 가져옴
         if (err) {
             console.error('Error fetching original data:', err);
+            // @ts-ignore
             res.status(500).json({ message: 'Error fetching original data' });
             return;
         }
         if (results.length === 0) {
             console.error('No original data found');
+            // @ts-ignore
             res.status(404).json({ message: 'No original data found' });
             return;
         }
@@ -532,6 +585,7 @@ app.post('/modify', function (req, res) {
             return res.status(400).send('No files uploaded');
         }
         // Process uploaded files (extract filenames)
+        // @ts-ignore
         var imageUrls = files.map(function (file) {
             return file.filename; // Assuming file.filename contains the generated filename
         });
@@ -564,16 +618,21 @@ app.post('/modify', function (req, res) {
                     res.status(404).json({ message: 'No modified data found' });
                     return;
                 }
+                // @ts-ignore
                 var boardData = modifiedResults[0]; // 첫 번째 결과를 사용
                 // res.render('view', { 'data': boardData });
+                // @ts-ignore
                 res.redirect("/view?board_idx=".concat(idx));
             });
         });
     });
 });
 app.post('/commentFrm', function (req, res) {
+    // @ts-ignore
     var boardIdx = req.body.board_idx;
+    // @ts-ignore
     var commentIdx = req.body.comment_idx;
+    // @ts-ignore
     var commentContent = req.body.comment; // 수정된 댓글 내용
     var userId = req.session.user; // 현재 사용자 ID (세션에서 가져옴)
     // 수정 전 데이터를 가져오기
@@ -581,11 +640,13 @@ app.post('/commentFrm', function (req, res) {
     connection.query(selectSql, [commentIdx], function (err, results) {
         if (err) {
             console.error('Error fetching original data:', err);
+            // @ts-ignore
             res.status(500).json({ message: 'Error fetching original data' });
             return;
         }
         if (results.length === 0) {
             console.error('No original data found');
+            // @ts-ignore
             res.status(404).json({ message: 'No original data found' });
             return;
         }
@@ -600,11 +661,13 @@ app.post('/commentFrm', function (req, res) {
         connection.query(updateSql, [commentContent, commentIdx], function (err, updateResult) {
             if (err) {
                 console.error('Error updating data:', err);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error updating data' });
                 return;
             }
             if (updateResult.affectedRows === 0) {
                 console.error('11No modified data found');
+                // @ts-ignore
                 res.status(404).json({ message: '11No modified data found' });
                 return;
             }
@@ -614,14 +677,17 @@ app.post('/commentFrm', function (req, res) {
             connection.query(modifiedDataSql, [boardIdx], function (err, modifiedResults) {
                 if (err) {
                     console.error('Error fetching modified data:', err);
+                    // @ts-ignore
                     res.status(500).json({ message: 'Error fetching modified data' });
                     return;
                 }
                 if (modifiedResults.length === 0) {
                     console.error('No modified data found');
+                    // @ts-ignore
                     res.status(404).json({ message: 'No modified data found' });
                     return;
                 }
+                // @ts-ignore
                 var boardData = modifiedResults[0]; // 첫 번째 결과를 사용
                 res.redirect("/view?board_idx=".concat(boardIdx));
             });
@@ -631,11 +697,13 @@ app.post('/commentFrm', function (req, res) {
 // 댓글 달기
 app.post('/comment', function (req, res) {
     var userId = req.session.user;
+    // @ts-ignore
     var content = req.body.content;
     var boardId = req.query.board_idx;
     var sql = "INSERT INTO comment(user_id, comment, board_idx, row_num, comment_regdate) \n  SELECT ?, ?, ?, IFNULL(MAX(row_num), 0) + 1, now() FROM comment WHERE board_idx = ?";
     var values = [userId, content, boardId, boardId];
     // 데이터 삽입
+    // @ts-ignore
     connection.query(sql, values, function (err, result) {
         if (err) {
             console.error('Error inserting data:', err);
@@ -648,15 +716,18 @@ app.post('/comment', function (req, res) {
         connection.query(modifiedDataSql, [boardId], function (err, modifiedResults) {
             if (err) {
                 console.error('Error fetching modified data:', err);
+                // @ts-ignore
                 res.status(500).json({ message: 'Error fetching modified data' });
                 return;
             }
             if (modifiedResults.length === 0) {
                 console.error('No modified data found');
+                // @ts-ignore
                 res.status(404).json({ message: 'No modified data found' });
                 return;
             }
             // res.send("<script> alert('등록되었습니다.'); location.href='/list';</script>");
+            // @ts-ignore
             res.redirect("/view?board_idx=".concat(boardId));
         });
     });
@@ -666,7 +737,9 @@ app.post('/comment', function (req, res) {
 // });
 // 회원가입
 app.post('/join', function (req, res) {
+    // @ts-ignore
     var id = req.body.id;
+    // @ts-ignore
     var pw = req.body.password;
     var idx = [id, pw];
     var checkSql = 'SELECT * FROM users WHERE user_id = ? AND user_pw = ?';
@@ -684,6 +757,7 @@ app.post('/join', function (req, res) {
         else {
             // If ID doesn't exist, proceed with the insertion
             var insertSql = 'INSERT INTO users(user_id, user_pw) VALUES(?,?)';
+            // @ts-ignore
             connection.query(insertSql, idx, function (err, result) {
                 if (err) {
                     console.error('Error inserting data:', err);
@@ -697,12 +771,15 @@ app.post('/join', function (req, res) {
     });
 });
 // 로그인 페이지 렌더링
+// @ts-ignore
 app.get('/login', function (req, res) {
     res.render('login', { title: "로그인" });
 });
 // 로그인 처리
 app.post('/login', function (req, res) {
+    // @ts-ignore
     var id = req.body.id;
+    // @ts-ignore
     var pw = req.body.password;
     var idx = [id, pw];
     // 아이디와 비밀번호를 확인하는 쿼리 실행
@@ -724,6 +801,7 @@ app.post('/login', function (req, res) {
     });
 });
 /////////////////////////////////////////////////////////////////////////
+// @ts-ignore
 app.get('/upload', function (req, res) {
     res.render('upload.ejs');
 });
@@ -738,5 +816,6 @@ app.post("/upload", upload.single('myFile'), function (req, res) {
 // });
 // 서버 가동
 app.listen(port, function () {
+    // @ts-ignore
     console.log("Example app listening on port ".concat(port));
 });
