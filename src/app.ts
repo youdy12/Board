@@ -26,7 +26,6 @@ app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
 });
-출처: https://beagle-dev.tistory.com/194 [언젠간 되어있겠지:티스토리]
 
 // HTML 파일을 EJS 템플릿으로 렌더링하기 위한 엔진 설정
 app.engine('html', require('ejs').renderFile);
@@ -142,7 +141,7 @@ app.get('/list', (req: Request, res: Response) => {
 
       return;
     }
-    console.log(results);
+    // console.log(results);
     // 전체 게시물 수 가져오기
     connection.query(countQuery, params, (error, countResult) => {
       if (error) {
