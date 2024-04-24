@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var cors = require('cors')
 var mysql = require("mysql");
 var app = express();
 var port = 3000;
@@ -33,6 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(publicPath));
 // app.use('/css', express.static(path.join(__dirname, 'static')));
+app.use(cors())
 app.set('views', path.join(__dirname, 'views'));
 // 세션 설정
 app.use(session({
