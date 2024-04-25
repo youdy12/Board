@@ -12,8 +12,8 @@ var publicPath = path.join(__dirname, "files");
 var multer = require("multer");
 var uuid4_1 = require("uuid4");
 var conn = {
-    host: '127.0.0.1',
-    port: 3306,
+    host: 'svc.sel5.cloudtype.app',
+    port: 31190,
     user: 'root',
     password: 'root',
     database: '게시판',
