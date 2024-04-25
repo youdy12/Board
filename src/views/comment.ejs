@@ -41,12 +41,12 @@
 </head>
 <body>
   <h1>
-    <a href="http://localhost:3000/" style="color: darkcyan; text-decoration: none;">게시판</a>
+    <a href="<%= process.env.APP_URL %>" style="color: darkcyan; text-decoration: none;">게시판</a>
     <hr>
   </h1>
 
     <h2>작성한 게시글</h2>
-    <button type="submit" onclick="location.href='/list'" style="margin: 0 0 10px 0px;">◀️</button>
+    <button type="submit" onclick="location.href='<%= process.env.APP_URL %>list'" style="margin: 0 0 10px 0px;">◀️</button>
     <form action="/like?board_idx=<%=data.board_idx%>" method="POST">
         <button type="submit"  style="position: static; float: right;">Like</button>
         <input type="hidden" name="postId" value="result.board_idx">

@@ -45,19 +45,23 @@
   </style>
 </head>
 <body>
-  <h2><a href="process.env.APP_URL">MAIN</a></h2>
+  <h2><a href="<%= process.env.APP_URL %>">MAIN</a></h2>
   <hr style="margin: 5px 120px 5px 120px;  border: 1px solid rgb(14, 14, 14)5542;">
   
   
     <div style="text-align: center; margin: 10px;">
-    <a href="process.env.APP_URL/login">Login Page</a>
+    <a href="<%= process.env.APP_URL %>login">Login Page</a>
     </div>
     <div  style="text-align: center; margin: 10px;">
-      <a href="process.env.APP_URL/list?page=1">Board List</a>
+      <a href="<%= process.env.APP_URL %>list?page=1">Board List</a>
     </div>
   
     <script>
-      
-    </script>
+        document.addEventListener("DOMContentLoaded", () => {
+          console.log( "ready!" );
+          const test = '<%= process.env.APP_URL %>'
+        console.log("🚀 ~ test:", test)
+      });
+    </script> 
 </body>
 </html>

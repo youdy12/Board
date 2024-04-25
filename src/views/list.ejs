@@ -188,12 +188,12 @@
 </head>
 <body>
   <h1>
-    <a href="https://port-0-board-1pgyr2mlvd66r45.sel5.cloudtype.app">BOARD</a>
+    <a href="<%= process.env.APP_URL %>">BOARD</a>
     <hr style="margin: 5px 0 5px 0;">
   </h1>
 
   <div style="display: flex; align-items: center;">
-    <h2><a href="http://localhost:3000/list?page=1">Board List</a></h2>
+    <h2><a href="<%= process.env.APP_URL %>list?page=1">Board List</a></h2>
   </div>
   
   <!-- 글쓰기 버튼 -->
@@ -318,5 +318,13 @@
       <% } %>
   </div>
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log( "ready!" );
+    const test = '<%= process.env.APP_URL %>'
+  console.log("🚀 ~ test:", test)
+});
+  
 
+</script>
 </html>
