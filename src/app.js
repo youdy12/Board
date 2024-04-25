@@ -13,6 +13,7 @@ var multer = require("multer");
 const { v4: uuidv4 } = require('uuid');
 
 const dotenv = require('dotenv');
+require("dotenv").config();
 dotenv.config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) })
 // console.log(document)
 console.log('path', path.join(__dirname, `../.env.${process.env.NODE_ENV}`))
