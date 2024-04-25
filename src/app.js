@@ -10,7 +10,15 @@ var session = require("express-session");
 var path = require("path");
 var publicPath = path.join(__dirname, "files");
 var multer = require("multer");
-var uuid4_1 = require("uuid4");
+const { v4: uuidv4 } = require('uuid');
+
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) })
+// console.log(document)
+console.log('path', path.join(__dirname, `../.env.${process.env.NODE_ENV}`))
+console.log('process.env', process.env)
+
+// console.log('process.env', process.env)/
 var conn = {
     host: 'svc.sel5.cloudtype.app',
     port: 31190,
@@ -215,6 +223,9 @@ app.get('/writeDelete', function (req, res) {
 app.get('/write', requireLogin, function (req, res) {
     res.render('write', { title: "게시판 글 쓰기" });
 });
+
+const randomID = uuidv4();
+
 var storage = multer.diskStorage({
     // @ts-ignore
     destination: function (req, file, done) {
@@ -223,7 +234,7 @@ var storage = multer.diskStorage({
     // @ts-ignore
     filename: function (req, file, done) {
         // @ts-ignore
-        var randomID = (0, uuid4_1.default)();
+        const randomID = uuidv4();
         var ext = path.extname(file.originalname); // 파일 이름
         var basename = path.basename(file.originalname, ext);
         done(null, basename + '_' + new Date().getTime() + ext);
