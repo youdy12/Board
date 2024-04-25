@@ -50,18 +50,20 @@
   
   
     <div style="text-align: center; margin: 10px;">
-    <a href="https://port-0-board-1pgyr2mlvd66r45.sel5.cloudtype.app/login">Login Page</a>
+    <a href="<%= process.env.APP_URL %>login">Login Page</a>
     </div>
     <div  style="text-align: center; margin: 10px;">
       <a href="<%= process.env.APP_URL %>list?page=1">Board List</a>
     </div>
   
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          console.log( "ready!" );
-          const test = '<%= process.env.APP_URL %>'
-        console.log("🚀 ~ test:", test)
-      });
-    </script> 
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log( "ready!" );
+      const test = '<%= process.env.APP_URL %>'
+    console.log("🚀 ~ test:", test)
+  });
+  
+
+</script>
 </body>
 </html>
