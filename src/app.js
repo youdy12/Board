@@ -225,12 +225,13 @@ app.get('/write', requireLogin, function (req, res) {
 });
 
 const randomID = uuidv4();
-
 var storage = multer.diskStorage({
     // @ts-ignore
+    
     destination: function (req, file, done) {
-        done(null, 'files/'); // 파일 저장 경로
-    },
+        done(null, path.join(__dirname, 'files')); // 파일 저장 경로 여기요 넵
+    }, // 이걸 상대경로에 맞게 설정을 해야됩니다
+    
     // @ts-ignore
     filename: function (req, file, done) {
         // @ts-ignore
