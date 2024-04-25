@@ -12,6 +12,10 @@ var publicPath = path.join(__dirname, "files");
 var multer = require("multer");
 const { v4: uuidv4 } = require('uuid');
 
+// require('dotenv').config();
+
+console.log('APP_URL:', process.env.APP_URL);
+
 const dotenv = require('dotenv');
 dotenv.config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) })
 // console.log(document)
