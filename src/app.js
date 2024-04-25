@@ -150,7 +150,7 @@ app.get('/list', function (req, res) {
             res.status(500).json({ message: 'Error fetching posts' });
             return;
         }
-        console.log(results);
+        // console.log(results);
         // 전체 게시물 수 가져오기
         connection.query(countQuery, params, function (error, countResult) {
             if (error) {
