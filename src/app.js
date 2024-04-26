@@ -251,7 +251,7 @@ app.post('/writeProc', upload.array('myFiles', 5), function (req, res) {
     var content = req.body.content;
     var userId = req.session.user;
     var files = req.files;
-    console.log('files', files)
+    // console.log('files', files)
     // Check if files were uploaded
     if (!files || files.length === 0) {
         return res.status(400).send('No files uploaded');
